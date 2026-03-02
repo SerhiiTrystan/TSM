@@ -273,3 +273,8 @@ class rename_selected_obj(bpy.types.Operator):
                     obj.data.name = new_name + "_mesh"
                 self.report({"INFO"},"Object renamed")
             return{"FINISHED"}
+    
+
+class popup_menu(bpy.types.Operator):
+    bl_idname = "l"
+    bl_label = ""
