@@ -51,7 +51,7 @@ class exchange_panel(bpy.types.Panel):
     bl_label = "TSBridgek"
     bl_idname = "exhange_panel"
     bl_space_type = "VIEW_3D"
-    bl_region_type "UI"
+    bl_region_type = 'UI'
     bl_category = "TSM"
 
     def draw(self, context):
@@ -63,12 +63,13 @@ class exchange_panel(bpy.types.Panel):
         layout.operator("exchange.export_fbx", icon="EXPORT")
         layout.operator("exchange.import_fbx", icon="IMPORT")
         layout.operator("exchange.clear_folder", icon="TRASH")
+        layout.operator("exchange.rename_obj", icon="CUBE")
 
 class add_tool_panel(bpy.types.Panel):
     bl_label = "TSBridge"
     bl_idname = "add_tools"
     bl_space_type = "VIEW_3D"
-    bl_region_type "UI"
+    bl_region_type = "UI"
     bL_category = "TSM"
 
     def draw(self, context):

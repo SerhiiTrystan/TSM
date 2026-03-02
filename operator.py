@@ -1,4 +1,6 @@
 import bpy
+import os
+from . import utils
 
 #operator to set selected UV Map
 
@@ -153,8 +155,9 @@ class material_clear(bpy.types.Operator):
 
     def execute(self, context):
         for obj in context.selected_objects:
-            if obj.type == 'MESH'
+            if obj.type == 'MESH':
             # delete all material from slots
+                obj.data.materials.clear()
         self.report({'INFO'}, f"Material deleted from '{obj.name}' objects")
         return {'FINISHED'}
 
@@ -169,29 +172,21 @@ class export_to_folder(bpy.types.Operator):
     def execute(self, context):
         props = context.scene.exchange_props
         path = bpy.path.abspath(props.exchange_path)
+        os.makedirs(path, exest_ok=True)
 
-        if not os.path.exist(path):
-            self.report({'ERROR'}, "Folder non exist")
-            return {'CANCELLED'}
-        
-        fbx_files = [f for os.listdir(path) if f.lower().endswith(".fbx")]
+        for file in os.listdir(path):
+            if file.lower().endswith(".fbx"):
+                os.remove(os.path.join(path, file))
+        filepath = os.path.join(path, "blender_export.fbx")
 
-        if not fbx_files:
-            self.report({"ERROR"}, "No FBX in folder")
-            return {'CANCELLED'}
-
-        if len(fbx_files) ==  1:
-            filepath = os.path.join(path, fbx_files{0})
-            bpy.ops.import_scene.fbx(filepath=filepath)
-            self.report({'INFO'}, f"Imported {fbx_files[0]}")
-        else:
-            def draw(self,context):
-                for f in fbx_files:
-                    op = self.layout.operator("exchange.import_one_fbx", text=f)
-                    op.filename = f
-            bpy.context.window_manager.popup_menu(draw, title="Select FBX", icon="FILE")
-
-        return {'FINISHED'}
+        bpy.ops.export_scene.fbx(
+            filepath=filepath,
+            use_selection=True,
+            apply_unit_scale=True,
+            bake_space_transform=True
+        )
+        self.report({"INFO"},f"Exported:{filepath}")
+        return{"FINISHED"}
 
 class import_from_folder(bpy.types.Operator):
     bl_idname = "exchange.import_fbx"
@@ -261,7 +256,7 @@ class clear_folder(bpy.types.Operator):
 #renamming part
 
 class rename_selected_obj(bpy.types.Operator):
-    bl_idname = "rename.selected_obj" 
+    bl_idname = "exchange.rename_obj" 
     bl_label = "Rename Selected Object"
 
     def execute(self,context):
