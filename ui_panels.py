@@ -48,7 +48,7 @@ class material_panel(bpy.types.Panel):
 
 #tsb
 class exchange_panel(bpy.types.Panel):
-    bl_label = "TSBridge"
+    bl_label = "TSBridgek"
     bl_idname = "exhange_panel"
     bl_space_type = "VIEW_3D"
     bl_region_type "UI"

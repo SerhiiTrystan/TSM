@@ -24,7 +24,19 @@ class exchange_properties(bpy.types.PropertyGroup):
 
 #list of register classes
 classes = (
-
+    uv_map_set_active_operator,
+    uv_map_create_operator,
+    uv_map_delete_operator,
+    uv_map_rename,
+    materail_delete,
+    material_select,
+    material_apply,
+    material_clear,
+    export_to_folder,
+    import_from_folder,
+    import_one_fbx,
+    clead_folder,
+    rename_selected_obj
 )
 
 #register function
@@ -39,6 +51,9 @@ def unregister():
 
     del bpy.types.Scene.exchange_props
     bpy.utils.unregister_class(ExchangeProperties)
+
+
+
 # entry point
 if __name__ == "__main__":
     register()
