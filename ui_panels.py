@@ -79,5 +79,7 @@ class exchange_panel(bpy.types.Panel):
 class popup_panel(bpy.types.Panel):
     bl_labal = "TSBPanel"
 
-    bl_idname =""
-    bl_idnamed
+    bl_idname = ""
+    bl_idnamed = ""
+
+    def draw(self, context):
