@@ -39,8 +39,8 @@ classes = (
     operator.rename_selected_obj,
     ui.uvpanel,
     ui.material_panel,
-    ui.exhange_panel
-
+    ui.exhange_panel,
+    ui.popup_panel
 )
 
 #register function

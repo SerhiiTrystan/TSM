@@ -48,7 +48,7 @@ class material_panel(bpy.types.Panel):
 
 #tsb
 class exchange_panel(bpy.types.Panel):
-    bl_label = "TSBridgek"
+    bl_label = "TSBridge"
     bl_idname = "exhange_panel"
     bl_space_type = "VIEW_3D"
     bl_region_type = 'UI'
@@ -65,13 +65,19 @@ class exchange_panel(bpy.types.Panel):
         layout.operator("exchange.clear_folder", icon="TRASH")
         layout.operator("exchange.rename_obj", icon="CUBE")
 
-class add_tool_panel(bpy.types.Panel):
-    bl_label = "TSBridge"
-    bl_idname = "add_tools"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bL_category = "TSM"
+ #class add_tool_panel(bpy.types.Panel):
+  #  bl_label = "TSBridge"
+ #   bl_idname = "add_tools"
+ #   bl_space_type = "VIEW_3D"
+ #   bl_region_type = "UI"
+ #   bL_category = "TSM"
+#
+ #   def draw(self, context):
+#       layout = self.layout
 
-    def draw(self, context):
-        layout = self.layout
-        
+
+class popup_panel(bpy.types.Panel):
+    bl_labal = "TSBPanel"
+
+    bl_idname =""
+    bl_idnamed
