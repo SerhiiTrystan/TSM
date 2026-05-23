@@ -1,5 +1,7 @@
 import bpy
 import os
+import random
+import string
 from . import utils
 
 #operator to set selected UV Map
@@ -25,7 +27,7 @@ class uv_map_set_active_operator(bpy.types.Operator):
 
         # deselect oll obj
         bpy.ops.object.select_all(action='DESELECT')
-        
+
         # select obj without the uv map
 
         for obj in obj_without_uv:
@@ -44,13 +46,13 @@ class uv_map_delete_operator(bpy.types.Operator):
         uv_map_name = context.scene.uv_map_selector
         for obj in context.selected_objects:
             if obj.type == 'MESH' and uv_map_name in [uv.name for uv  in obj.data.uv_layers]:
-                 obj.data.uv_layers.remove(ojv.data.uv_layers[uv_map_name])
+                 obj.data.uv_layers.remove(obj.data.uv_layers[uv_map_name])
         self.report({'INFO'}, f"Deleted UV Map '{uv_map_name}'")
         return {'FINISHED'}
 
 # operator for creating a new uv map
 
-class uv_map_create(bpy.context.Operator):
+class uv_map_create(bpy.types.Operator):
     bl_idname = "object.uv_map_create"
     bl_label =  "Create New UV Map"
     # проверка на то что существует ли название этого юв мапы
@@ -59,8 +61,8 @@ class uv_map_create(bpy.context.Operator):
         if not uv_map_name:
             self.report({'ERROR'}, "UV Map name cannot be empty")
             return {'CANCELLED'}
-        
-        for obj in context.selected.objects:
+
+        for obj in context.selected_objects:
             if obj.type == 'MESH':
                 # создание нового юв мапы
                 new_uv = obj.data.uv_layers.new(name=uv_map_name)
@@ -71,7 +73,7 @@ class uv_map_create(bpy.context.Operator):
 
 # переименовывание юв мапы
 
-class uv_map_rename(bpy.context.Operator):
+class uv_map_rename(bpy.types.Operator):
     bl_idname = "object.uv_map_name"
     bl_label = "Rename Active UV Map"
 
@@ -80,9 +82,9 @@ class uv_map_rename(bpy.context.Operator):
         if not new_name:
             self.report({'ERROR'}, "UV Map name cannot be empty")
             return {'CANCELLED'}
-        
+
         for obj in context.selected_objects:
-            if obj.type == 'MESH' and obj.data.uv_layers_active:
+            if obj.type == 'MESH' and obj.data.uv_layers.active:
                 obj.data.uv_layers.active.name = new_name
         self.report({'INFO'},f"Renamed active UV Map to '{new_name}")
         return {'FINISHED'}
@@ -91,14 +93,14 @@ class uv_map_rename(bpy.context.Operator):
 # часть для материалов
 # delete materail from selected obj
 class material_delete(bpy.types.Operator):
-    bl_idname = "object.material_delete" 
+    bl_idname = "object.material_delete"
     bl_label =  "Delete Selected Material"
 
     def execute(self, context):
         mat_name = context.scene.material_selector
-        mat = bpy.data.materials.get(man_name)
+        mat = bpy.data.materials.get(mat_name)
 
-        if mat: 
+        if mat:
             bpy.data.materials.remove(mat)
             self.report({'INFO'}, f"Deleted material '{mat_name}'")
         else:
@@ -108,13 +110,13 @@ class material_delete(bpy.types.Operator):
 # operator for selecting obj with selected material
 
 class material_select(bpy.types.Operator):
-    bl_idname = "object.material_select_objects" 
+    bl_idname = "object.material_select_objects"
     bl_label = "Select Object with Material"
 
     def execute(self, context):
         mat_name = context.scene.material_selector
         bpy.ops.object.select_all(action='DESELECT')
-        
+
         for obj in context.selected_objects:
             if obj.type == 'MESH' and any (slot.material and slot.material.name == mat_name for slot in obj.material_slots):
                 obj.select_set(True)
@@ -135,12 +137,12 @@ class material_apply(bpy.types.Operator):
         if not material:
             self.report({'ERROR'}, f"Material '{mat_name} not found'")
             return {'CANCELLED'}
-        
+
         for obj in context.selected_objects:
             if obj.type == 'MESH':
                 #assighn material to the first material slot
                 if not obj.material_slots:
-                    obj.data.material.append(material)
+                    obj.data.materials.append(material)
                 else:
                     obj.material_slots[0].material = material
         self.report ({'INFO'}, f"Applied material '{mat_name} to selected objects'")
@@ -162,7 +164,7 @@ class material_clear(bpy.types.Operator):
         return {'FINISHED'}
 
 
-# bridge main part 
+# bridge main part
 
 # bridge moment
 class export_to_folder(bpy.types.Operator):
@@ -172,7 +174,7 @@ class export_to_folder(bpy.types.Operator):
     def execute(self, context):
         props = context.scene.exchange_props
         path = bpy.path.abspath(props.exchange_path)
-        os.makedirs(path, exest_ok=True)
+        os.makedirs(path, exist_ok=True)
 
         for file in os.listdir(path):
             if file.lower().endswith(".fbx"):
@@ -207,7 +209,7 @@ class import_from_folder(bpy.types.Operator):
             return {"CANCELLED"}
 
         if len(fbx_files) == 1:
-            filepath = os.path.joinj(path, fbx_files[0])
+            filepath = os.path.join(path, fbx_files[0])
             bpy.ops.import_scene.fbx(filepath=filepath)
             self.report({'INFO'}, f"Imported {fbx_files[0]}")
         else:
@@ -244,7 +246,7 @@ class clear_folder(bpy.types.Operator):
     def execute(self, context):
         props = context.scene.exchange_props
         path = bpy.path.abspath(props.exchange_path)
-        if os.path.exist(path):
+        if os.path.exists(path):
             for file in os.listdir(path):
                 if file.lower().endswith(".fbx"):
                     os.remove(os.path.join(path, file))
@@ -256,7 +258,7 @@ class clear_folder(bpy.types.Operator):
 #renamming part
 
 class rename_selected_obj(bpy.types.Operator):
-    bl_idname = "exchange.rename_obj" 
+    bl_idname = "exchange.rename_obj"
     bl_label = "Rename Selected Object"
 
     def execute(self,context):
@@ -266,14 +268,14 @@ class rename_selected_obj(bpy.types.Operator):
         def rename_by_random_name():
             for obj in bpy.context.selected_objects:
                 new_name = random_name(8)
-                
+
                 obj.name = new_name
 
                 if obj.type == 'MESH' and obj.data:
                     obj.data.name = new_name + "_mesh"
                 self.report({"INFO"},"Object renamed")
             return{"FINISHED"}
-    
+
 
 class popup_menu(bpy.types.Operator):
     bl_idname = "l"
