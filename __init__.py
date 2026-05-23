@@ -1,5 +1,5 @@
 import bpy
-from . import operator, ui_panels
+from . import operators, ui_panels
 
 #addon metadata:
 
@@ -9,7 +9,7 @@ bl_info = {
     "author": "Grok/Chat GPT/ TS",
     "version": (0, 0, 1),
     "blender": (5, 0, 1),
-    "Glocation": "View3D > N - panel > UV & Material Manager",
+    "location": "View3D > N - panel > UV & Material Manager",
     "warning": "Manage UV maps and Materials for selected objects",
     "wiki_url": "github",
     "category": "Object"
@@ -24,22 +24,22 @@ class exchange_properties(bpy.types.PropertyGroup):
 
 #list of register classes
 classes = (
-    operator.uv_map_set_active_operator,
-    operator.uv_map_create_operator,
-    operator.uv_map_delete_operator,
-    operator.uv_map_rename,
-    operator.materail_delete,
-    operator.material_select,
-    operator.material_apply,
-    operator.material_clear,
-    operator.export_to_folder,
-    operator.import_from_folder,
-    operator.import_one_fbx,
-    operator.clean_folder,
-    operator.rename_selected_obj,
+    operators.uv_map_set_active_operator,
+    operators.uv_map_create_operator,
+    operators.uv_map_delete_operator,
+    operators.uv_map_rename,
+    operators.material_delete,
+    operators.material_select,
+    operators.material_apply,
+    operators.material_clear,
+    operators.export_to_folder,
+    operators.import_from_folder,
+    operators.import_one_fbx,
+    operators.clean_folder,
+    operators.rename_selected_obj,
     ui_panels.uvpanel,
     ui_panels.material_panel,
-    ui_panels.exhange_panel,
+    ui_panels.exchange_panel,
     ui_panels.popup_panel
 )
 
@@ -93,4 +93,3 @@ def unregister():
 # entry point
 if __name__ == "__main__":
     register()
-#ну и что оно будет комититься или как
