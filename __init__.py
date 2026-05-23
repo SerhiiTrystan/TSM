@@ -93,3 +93,4 @@ def unregister():
 # entry point
 if __name__ == "__main__":
     register()
+#ну и что оно будет комититься или как
