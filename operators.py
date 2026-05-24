@@ -164,7 +164,7 @@ class material_clear(bpy.types.Operator):
         return {'FINISHED'}
 
 
-# bridge main part
+# Bridge Main Part
 
 # bridge moment
 class export_to_folder(bpy.types.Operator):
@@ -277,6 +277,6 @@ class rename_selected_obj(bpy.types.Operator):
             return{"FINISHED"}
 
 
-class popup_menu(bpy.types.Operator):
-    bl_idname = "l"
-    bl_label = ""
+#class popup_menu(bpy.types.Operator):
+#    bl_idname = "l"
+#   bl_label = ""
